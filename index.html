@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Quiz Game</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
+        <link rel="stylesheet" type="text/css" href=".\assets\style.css">
+    </head>
+    <body>
+        <header>
+            <div class="large-font"><h1>JavaScript Quiz Game!</h1></div>
+        </header>
+        <main>
+            <section>
+                <div class="quiz-container">
+                    <div id="quizBox" class="large-font"></div>
+                    <button id="startBtn">Start!</button>
+                    <button id="prevBtn" style="display: none;">Previous Question</button>
+                    <button id="nextBtn" style="display: none;">Next Question</button>
+                    <button id="submitBtn" style="display: none;">Submit Quiz</button>
+                    <div id="results" class="medium-font"></div>
+                </div>
+            </section>
+            <section>
+                <div id="results"></div>
+                <div class="timer">
+                    <div class="timer-text">
+                        <div class="large-font" id="timer-count">60</div>
+                        <h3>seconds remaining</h3>
+                    </div>
+                </div>
+                <button type="submit" class="resetBtn" onClick="refreshQuiz()">Try Again?</button>
+            </section>
+        </main>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <script src=".\assets\script.js"></script>
+    </body>
+</html>
