@@ -6,7 +6,7 @@ This project was created to study JavaScript, and make use of local storage to r
 
 ## Usage
 
-To use this app, the link is here [LINK](). Hit start to begin the quiz; if the user completes the quiz the timer will stop and an alert will tell them to submit their quiz when ready. After the submission button is hit, a prompt will take the initials entered and reflect them on the screen of the score list. A try again button allows the user to restart the quiz. However, if the user runs out of time, an alert will notify them of this and start the endgame function to take the initials and record the score the user could make.
+To use this app, the link is here [LINK](https://kc-nick.github.io/javascript-quiz/). Hit start to begin the quiz; if the user completes the quiz the timer will stop and an alert will tell them to submit their quiz when ready. After the submission button is hit, a prompt will take the initials entered and reflect them on the screen of the score list. A try again button allows the user to restart the quiz. However, if the user runs out of time, an alert will notify them of this and start the endgame function to take the initials and record the score the user could make.
 
 ## Preview
 

@@ -14,7 +14,7 @@ $(document).ready(function () {
   let currentQuestion = 0;
 
   //sets timer
-  var counter = 60;
+  var counter = 80;
 
   function myTimer() {
     //counts down
