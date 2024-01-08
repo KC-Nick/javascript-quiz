@@ -1,3 +1,6 @@
+//declares timer
+let timer;
+
 $(document).ready(function () {
   console.log("ready!");
   const startBtn = document.getElementById("startBtn");
@@ -11,9 +14,7 @@ $(document).ready(function () {
   let currentQuestion = 0;
 
   //sets timer
-  var counter = 600;
-  //declares timer
-  let timer;
+  var counter = 60;
 
   function myTimer() {
     //counts down
@@ -27,10 +28,11 @@ $(document).ready(function () {
     }
 
     //alerts that game over screen will run and stops timer
-    if (counter === 0) {
+    if (counter <= 0) {
 
       alert('Game over!');
-      clearInterval(counter);
+      clearInterval(timer);
+      clearBox();
       endGame();
 
     }
@@ -52,31 +54,56 @@ $(document).ready(function () {
   var questions =
     [
       {
-        question: "What is JavaScript used for?",
-        choices: ["Styling applications", "Creating the base of the application", "Adding function to an application", "All of the above"],
-        answer: "Adding function to an application"
+        question: "Which of these is NOT a JavaScript datatype?",
+        choices: ["Booelan", "Number", "JSON", "String", "Undefined", "Null", "Bigint"],
+        answer: "JSON"
       },
 
       {
-        question: "TRUE or FALSE: JSON is a data interchange format used to send and receive data by JavaScript, and no other data languages.",
+        question: "TRUE or FALSE: You are tasked to use the script tag to make sure scripts run after the page has loaded, so you would use async to do this.",
         choices: ["TRUE", "FALSE"],
         answer: "FALSE"
       },
       {
-        question: "When using JSON to send data, can it stringify functions?",
-        choices: ["Yes", "No", "Sometimes, depending on the function", "Sometimes, depending on the receiving end"],
-        answer: "No"
+        question: "In a basic app, the script tag to include JavaScript in your HTML is placed:",
+        choices: ["In the head tag, with the CSS tag", "At the bottom of the body tag", "In the part of the HTML that it is being called on for functions", "At the top of the body tag before the header"],
+        answer: "At the bottom of the body tag"
       },
       {
         question: "What does the typeof operator console log?",
-        choices: ["Logs the type of function it is inside, such as the function name.", "Logs the type of data language being used, such as Python.", "Logs the type of style being used on the webpage.", "Logs the type of the value it is used for, such as Boolean"],
-        answer: "Logs the type of the value it is used for, such as Boolean"
+        choices: ["Logs the type of function it is inside, such as the function name.", "Logs the type of data language being used, such as Python.", "Logs the type of style being used on the webpage.", "Logs the data type of the value it is used for, such as Boolean"],
+        answer: "Logs the data type of the value it is used for, such as Boolean"
       },
       {
-        question: "TRUE or FALSE: JSON converts a string into an object to send data.",
+        question: "TRUE or FALSE: JavaScript is a scripting library that allows you to implement compex functions on a web page.",
         choices: ["TRUE", "FALSE"],
         answer: "FALSE"
-      }
+      },
+      {
+        question: "When running a JavaScript file, it will run:",
+        choices: ["By what functions have most importance to the web page", "In the order it is written", "The order is declared in the JS file"],
+        answer: "In the order it is written"
+      },
+      {
+        question: "TRUE or FALSE: JavaScript is used for function only, and cannot function as CSS and HTML do.",
+        choices: ["TRUE", "FALSE"],
+        answer: "FALSE"
+      },
+      {
+        question: "Defer is used in the script tag to:",
+        choices: ["Defer the JavaScript from loading in order to loading in specific order", "Skip over certain functions unless called", "Hold the JavaScript loading until the page is done loading", "Defines an asynchronous script"],
+        answer: "Hold the JavaScript loading until the page is done loading"
+      },
+      {
+        question: "TRUE or FALSE: JavaScript does not support regular expressions, and requires additional tools to implement it.",
+        choices: ["TRUE", "FALSE"],
+        answer: "FALSE"
+      },
+      {
+        question: "TRUE or FALSE: JavaScript is a client-side language, and does not require a server to run.",
+        choices: ["TRUE", "FALSE"],
+        answer: "TRUE"
+      },
     ];
 
   function showQuestions() {
@@ -125,16 +152,10 @@ $(document).ready(function () {
         //sets updated score to local storage
         localStorage.setItem('score', scoreString);
 
-      } else {
+      } else if (event.target.value !== questions[currentQuestion].answer) {
 
         //if answer is wrong, it will subtract 15 seconds from the timer
         counter -= 15;
-
-        if (counter < 0) {
-
-          counter = 0;
-
-        }
       }
 
       if (currentQuestion === questions.length) {
@@ -143,15 +164,7 @@ $(document).ready(function () {
         var submitMsg = confirm("You have completed the quiz! Click submit when you're ready to save your score.");
 
         if (submitMsg) {
-
-          //stops timer
-          clearInterval(timer);
-          //changes number of timer to 0
-          $('#timer-count').text('0');
-          //replaces the question and answer choices in quizBox with submit message
-          $('#questions').text('Play again to increase your score! Submit score below.');
-          $('#quizBox').empty();
-
+          clearBox();
         };
 
       } else {
@@ -162,6 +175,16 @@ $(document).ready(function () {
     })
   });
 });
+
+function clearBox() {
+  //stops timer
+  clearInterval(timer);
+  //changes number of timer to 0
+  $('#timer-count').text('0');
+  //replaces the question and answer choices in quizBox with submit message
+  $('#questions').text('Play again to increase your score! Submit score below.');
+  $('#quizBox').empty();
+}
 
 function endGame() {
 
