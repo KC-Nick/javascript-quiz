@@ -4,34 +4,51 @@ $(document).ready(function () {
   const submitBtn = document.getElementById("submitBtn");
   const quizBox = document.getElementById("quizBox");
 
+  //creates array for the correct answers
+  var correctAnswers = [];
+
   //gives meaning to variable currentQuestion
   let currentQuestion = 0;
 
   //sets timer
   var counter = 60;
+  //declares timer
   let timer;
 
   function myTimer() {
+    //counts down
     counter--;
-    //Gives instruction on countdown
+
     if (counter >= 0) {
+      //if counter is greater than or equal to 0, it will display
       span = document.getElementById("timer-count");
       span.innerHTML = counter;
+
     }
-    //Alerts to game over and clears timer
+
+    //alerts that game over screen will run and stops timer
     if (counter === 0) {
-      alert('sorry, out of time');
+
+      alert('Game over!');
       clearInterval(counter);
+      endGame();
+
     }
   }
-  //Hides and shows buttons and boxes for when the quiz is started
+
+  //hides and shows buttons and boxes for when the quiz is started
   if (startBtn) {
     startBtn.addEventListener("click", function () {
+
       submitBtn.style.display = "block";
+
       startBtn.style.display = "none";
+
       quizBox.style.display = "block";
+
     })
   }
+
   var questions =
     [
       {
@@ -61,66 +78,145 @@ $(document).ready(function () {
         answer: "FALSE"
       }
     ];
+
   function showQuestions() {
-    console.log(questions[currentQuestion]);
-    // Loops questions
+
+    //changes html of questions div to render questions
     document.getElementById("questions").innerHTML = questions[currentQuestion].question;
+
+    //empties quizBox div so repetition is avoided
     $("#quizBox").empty();
+
     for (let j = 0; j < questions[currentQuestion].choices.length; j++) {
-      console.log(questions[currentQuestion].choices[j]);
+
       $("#quizBox").append(`<h2><input type="radio" value="${questions[currentQuestion].choices[j]}">${questions[currentQuestion].choices[j]}</h2>`)
     }
   };
-  //Adds function to start button
+
+  //adds function to start button
   $(startBtn).click(function () {
-    //Sets timer - Needs to add/deduct time for right/wrong answers
+
+    //sets timer
     timer = setInterval(myTimer, 1000);
+
     showQuestions()
 
     $("#quizBox").click(function (event) {
+
+
       if (event.target.value === questions[currentQuestion].answer) {
+        //goes to next question
         currentQuestion++;
-        var correctAnswers = JSON.parse(localStorage.getItem('correctAnswers')) || []; // Retrieve existing correct answers from localStorage or initialize an empty array
-        correctAnswers.push(questions[currentQuestion - 1].answer); // Add the correct answer to the array
-        var correctAnswersString = JSON.stringify(correctAnswers); // Convert the array to a string
-        localStorage.setItem('correctAnswers', correctAnswersString); // Save the updated correct answers to localStorage
+        //- 1 takes the last question and pushes the correct answer to the array after the answer is selected
+        correctAnswers.push(questions[currentQuestion - 1].answer);
+
+        //sets score number
+        score = correctAnswers.length;
+
+        //if score is not 0, as set at top of code, and local storage has a score, it will parse the score
+        if (!score && localStorage.getItem('score')) {
+
+          score = JSON.parse(localStorage.getItem('score'));
+        };
+
+        //converts array of score to string
+        var scoreString = JSON.stringify(score);
+
+        //sets updated score to local storage
+        localStorage.setItem('score', scoreString);
+
       } else {
+
+        //if answer is wrong, it will subtract 15 seconds from the timer
         counter -= 15;
+
         if (counter < 0) {
+
           counter = 0;
+
         }
       }
+
       if (currentQuestion === questions.length) {
-        clearInterval(timer);
-      }
-      else {
+
+        //alerts that the quiz is complete and score is ready to be submitted
+        var submitMsg = confirm("You have completed the quiz! Click submit when you're ready to save your score.");
+
+        if (submitMsg) {
+
+          //stops timer
+          clearInterval(timer);
+          //changes number of timer to 0
+          $('#timer-count').text('0');
+          //replaces the question and answer choices in quizBox with submit message
+          $('#questions').text('Play again to increase your score! Submit score below.');
+          $('#quizBox').empty();
+
+        };
+
+      } else {
+        //continues loop if the currentQuestion does not equal the last question
         showQuestions();
+
       };
     })
   });
 });
 
+function endGame() {
+
+  var userInitials = prompt("Please enter your initials:");
+  //gets score from local storage
+  var score = JSON.parse(localStorage.getItem('score'));
+
+  //if userInitials is not 0 and local storage has initials, it will parse the initials
+  if (!userInitials && localStorage.getItem('initials')) {
+    userInitials = JSON.parse(localStorage.getItem('initials'));
+  };
+
+  if (userInitials) {
+
+    //converts userInitials to string and sets them in local storage
+    var initials = JSON.stringify(userInitials)
+    localStorage.setItem('initials', initials);
+
+    //gets game history from local storage or creates empty array if it does exist yet
+    var gameHistory = localStorage.getItem('gameHistory') ? JSON.parse(localStorage.getItem('gameHistory')) : [];
+
+    //pushes userInitials and score, called at start of function, to gameHistory array
+    gameHistory.push({ initials, score });
+    localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+
+  }
+
+  showResults();
+
+}
+
+function showResults() {
+  //gets combined initials and score from local storage or creates new array if it doesn't exist yet
+  var gameHistory = localStorage.getItem('gameHistory') ? JSON.parse(localStorage.getItem('gameHistory')) : [];
+
+  //if gameHistory array is greater than 0
+  if (gameHistory.length > 0) {
+
+    // it will empty the results div and append the initials and score to the results div
+    $("#results").empty();
+    gameHistory.forEach(function (game) {
+      var results = $('<li>' + game.initials + ' with a score of ' + game.score + '</li>');
+      $("#results").append(results);
+    });
+
+  }
+}
+
 $("#submitBtn").click(function () {
   endGame();
 });
-function endGame() {
-  var initials = prompt("Please enter your initials:");
 
-  if (initials) {
-    var userInitials = JSON.stringify(initials)
-    localStorage.setItem('userInitials', userInitials);
-  }
-  const correctAnswers = JSON.parse(localStorage.getItem('correctAnswers'));
-  const getInitials = JSON.parse(localStorage.getItem('userInitials'));
+//shows results when page is loaded
+showResults();
 
-  // Loop through
-  $("results").empty();
-  let scoreObj = correctAnswers.length;
-  var initials = JSON.stringify(getInitials);
-  var score = JSON.stringify(scoreObj);
-  var results = $('<li>' + initials + ' with a score of ' + score + '</li>')
-  $("#results").append(results);
-}
 function refreshQuiz() {
   window.location.reload();
 };

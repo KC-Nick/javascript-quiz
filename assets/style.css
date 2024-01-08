@@ -35,9 +35,10 @@
   main {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
     justify-content: space-around;
   }
-  .quiz-container {
+  .container {
     background: #470099;
     border: 1px solid #eceff1;
     border-radius: 8px;
@@ -45,6 +46,7 @@
       rgba(60, 64, 67, 0.15) 0 2px 4px 3px;
     margin: auto;
     padding: 20px;
+    color: #ffff;
   }
   section {
     flex: 0 auto;
@@ -53,6 +55,7 @@
     background-color: white;
     border-radius: 8px;
   }
+  
   .large-font {
     font-size: 2em;
     text-align:center;
