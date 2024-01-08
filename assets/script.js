@@ -220,6 +220,11 @@ function showResults() {
   //gets combined initials and score from local storage or creates new array if it doesn't exist yet
   var gameHistory = localStorage.getItem('gameHistory') ? JSON.parse(localStorage.getItem('gameHistory')) : [];
 
+    // sort gameHistory array in descending order based on score
+    gameHistory.sort(function(a, b) {
+      return b.score - a.score;
+    });
+
   //if gameHistory array is greater than 0
   if (gameHistory.length > 0) {
 
